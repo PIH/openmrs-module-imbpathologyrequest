@@ -24,7 +24,7 @@ public class IMBPathologyRequestEncountersDashboard extends PatientDashboardTabE
 	 */
 	@Override
 	public String getRequiredPrivilege() {
-		return "View Pathology Encounters";
+		return "View Encounters Remotely";
 	}
 	
 	/*
@@ -44,6 +44,6 @@ public class IMBPathologyRequestEncountersDashboard extends PatientDashboardTabE
 	 */
 	@Override
 	public String getTabName() {
-		return "Pathology Encounters";
+		return "Pathology/OET Encounters";
 	}
 }

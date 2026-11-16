@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * This class configured as controller using annotation and mapped with the URL of
- * 'module/${rootArtifactid}/${rootArtifactid}Link.form'.
+ * 'module/imbpathologyrequest/imbpathologyrequest.form'.
  */
-@Controller("${rootrootArtifactid}.ImbpathologyrequestController")
-@RequestMapping(value = "module/${rootArtifactid}/${rootArtifactid}.form")
+@Controller("imbpathologyrequest.ImbpathologyrequestController")
+@RequestMapping(value = "module/imbpathologyrequest/imbpathologyrequest.form")
 public class ImbpathologyrequestController {
 	
 	/** Logger for this class and subclasses */
@@ -39,7 +39,7 @@ public class ImbpathologyrequestController {
 	UserService userService;
 	
 	/** Success form view name */
-	private final String VIEW = "/module/${rootArtifactid}/${rootArtifactid}";
+	private static final String VIEW = "/module/imbpathologyrequest/imbpathologyrequest";
 	
 	/**
 	 * Initially called after the getUsers method to get the landing form name

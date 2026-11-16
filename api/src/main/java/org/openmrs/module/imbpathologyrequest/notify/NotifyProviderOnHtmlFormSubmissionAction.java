@@ -61,7 +61,9 @@ public class NotifyProviderOnHtmlFormSubmissionAction implements CustomFormSubmi
 			for (Provider provider : providers) {
 
 				if (provider.getPerson() != null)
-					if (provider.getPerson().getAttribute("Health Center") != null)
+					if (provider.getPerson().getAttribute("Health Center") != null &&
+							provider.getPerson().getAttribute("Health Center").getValue() != null &&
+							provider.getPerson().getAttribute("Health Center").getValue().length() > 0)
 						if (provider.getPerson().getAttribute("Health Center") != null &&
 								session.getSubmissionActions().getCurrentPerson().getAttribute("Health Center") != null &&
 								provider.getPerson().getAttribute("Health Center").getValue() != null &&

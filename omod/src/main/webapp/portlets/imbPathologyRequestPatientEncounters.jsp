@@ -15,6 +15,20 @@
 	<iframe id="displayEncounterPopupIframe" width="100%" height="100%" marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"></iframe>
 </div>
 
+<style>
+table.pathologyPatientEncountersTable {
+       border: 1px solid #009d8e;
+       border-collapse: collapse;
+
+       }
+hr{
+border: 8px solid #009d8e;
+ border-radius: 5px;
+}
+</style>
+
+
+
 <script type="text/javascript">
 	$j(document).ready(function() {
 		$j('#displayEncounterPopup').dialog({
@@ -40,7 +54,7 @@
 <c:if test="${model.showPagination == 'true'}">
 <script type="text/javascript">
 	$j(document).ready(function() {
-		$j('#portlet${model.portletUUID} #patientEncountersTable').dataTable({
+		$j('#portlet${model.portletUUID} .pathologyPatientEncountersTable').dataTable({
 			"sPaginationType": "two_button",
 			"bAutoWidth": false,
 			"bFilter": false,
@@ -115,13 +129,19 @@ Parameters
 	</c:if>
 <openmrs:globalProperty var="pathologyEncounterTypeId" key="imbpathologyrequest.pathologyEncounterType"  />
 <openmrs:globalProperty var="pathologyFullAllowedLocationID" key="imbpathologyrequest.pathologyFullAllowedLocationID"  />
+
+<%--  Start Pathology encounters --%>
+
 	<openmrs:hasPrivilege privilege="View Pathology Encounters">
 
 
 
 <div id="pathologyencounters">
-                        <table cellspacing="0" cellpadding="2" id="patientEncountersTable" width="100%">
-                            <thead bgcolor="42978f">
+                        <table cellspacing="0" cellpadding="2" class="pathologyPatientEncountersTable" width="100%">
+                            <thead bgcolor="#009d8e">
+							    <tr>
+                                    <th colspan="9" style="color:white;"> Pathology Encounters </th>
+							    </tr>
 							    <tr>
                                     <th class="hidden"> hidden Encounter id </th>
                                     <th class="encounterView" align="center" style="color:white;"><c:if test="${showViewLink == 'true'}">
@@ -188,10 +208,10 @@ Parameters
 </div>
 
 <div id="formEntryDialog">
-	<table cellspacing="0" cellpadding="2" id="patientEncountersTable" width="100%" border="1" style="border-collapse: collapse; border-color: 42978f;">
+	<table cellspacing="0" cellpadding="2" class="pathologyPatientEncountersTable" width="100%" border="1" style="border-collapse: collapse; border-color: 42978f;">
 
     	<!-- <center><u><spring:message code="htmlformentry.patientDashboard.enterForm"/></u></center> -->
-    	<thead bgcolor="42978f">
+    	<thead bgcolor="#009d8e">
                 <tr>
                     <th  style="color:white;"> Enter Form </th>
                 </tr>
@@ -212,7 +232,120 @@ Parameters
 </div>
 
 	</openmrs:hasPrivilege>
-	
+
+	<%--  End Pathology encounters --%>
+
+<br />
+<HR />
+<br />
+
+<%--  Start Oral Endocrine Therapy--%>
+
+	<openmrs:hasPrivilege privilege="View OERT Encounters">
+
+<openmrs:globalProperty var="oetEncounterTypeId" key="imbpathologyrequest.oertEncounterType"  />
+
+<div id="oetencounters">
+                        <table cellspacing="0" cellpadding="2" class="pathologyPatientEncountersTable" width="100%">
+                            <thead bgcolor="#009d8e">
+                            <tr>
+                                                                <th colspan="9" style="color:white;"> Oral Endocrine Therapy Encounters </th>
+                            							    </tr>
+							    <tr>
+                                    <th class="hidden"> hidden Encounter id </th>
+                                    <th class="encounterView" align="center" style="color:white;"><c:if test="${showViewLink == 'true'}">
+                                        <openmrs:message code="general.view"/>
+                                    </c:if></th>
+                                    <th class="encounterDatetimeHeader" style="color:white;"> <openmrs:message code="Encounter.datetime"/> </th>
+                                    <th class="hidden"> hidden Sorting Order (by Encounter.datetime) </th>
+                                    <th class="encounterTypeHeader" style="color:white;"> <openmrs:message code="Encounter.type"/>     </th>
+                                    <th class="encounterProviderHeader" style="color:white;"> <openmrs:message code="Encounter.provider"/> </th>
+                                    <th class="encounterFormHeader" style="color:white;"> <openmrs:message code="Encounter.form"/>     </th>
+                                    <th class="encounterLocationHeader" style="color:white;"> <openmrs:message code="Encounter.location"/> </th>
+                                    <th class="encounterEntererHeader" style="color:white;"> <openmrs:message code="Encounter.enterer"/> </th>
+							    </tr>
+						    </thead>
+						    <tbody>
+                                <c:forEach var="enc" items="${ model.oetEncounters }">
+                                <%-- <openmrs:forEachEncounter encounters="${model.oetEncounters}" sortBy="encounterDatetime" descending="true" var="enc" num="${model.num}"> --%>
+                            		<c:if test="${enc.encounterType.encounterTypeId == oetEncounterTypeId && (pathologyFullAllowedLocationID == model.providerlocationAttribute || model.patientLocationAttribute == model.providerlocationAttribute)}">
+
+
+
+
+
+                                        <tr class='${status.index % 2 == 0 ? "evenRow" : "oddRow"}'>
+                                            <td class="hidden">
+                                                <%--  this column contains the encounter id and will be used for sorting in the dataTable's encounter edit column --%>
+                                                ${enc.encounterId}
+                                            </td>
+                                            <td class="encounterView" align="center">
+                                                <c:if test="${showViewLink}">
+                                                <a href="${ pageContext.request.contextPath }/module/htmlformentry/htmlFormEntry.form?encounterId=${ enc.encounterId }">
+                                                                            <img src="${pageContext.request.contextPath}/images/file.gif" title="<openmrs:message code="general.view"/>" border="0" />
+                                                </a>
+                                                </c:if>
+                                            </td>
+                                            <td class="encounterDatetime">
+                                                <openmrs:formatDate date="${enc.encounterDatetime}" type="small" />
+                                            </td>
+                                            <td class="hidden">
+                                            <%--  this column contains the sorting order provided by ForEachEncounterTag (by encounterDatetime) --%>
+                                            <%--  and will be used for the initial sorting and sorting in the dataTable's encounterDatetime column --%>
+                                                ${count}
+                                            </td>
+                                            <td class="encounterType"><openmrs:format encounterType="${enc.encounterType}"/></td>
+                                            <td class="encounterProvider"><openmrs:format encounterProviders="${enc.providersByRoles}"/></td>
+                                            <td class="encounterForm">${enc.form.name}</td>
+                                            <td class="encounterLocation"><openmrs:format location="${enc.location}"/></td>
+                                            <td class="encounterEnterer">${enc.creator.personName}</td>
+                                        </tr>
+
+
+
+
+
+                                    </c:if>
+                                 </c:forEach>
+                                <%--</openmrs:forEachEncounter> --%>
+
+                                <c:if test="${pathologyFullAllowedLocationID != model.providerlocationAttribute && model.patientLocationAttribute != model.providerlocationAttribute}">
+                                    <tr><td colspan=10> <font color="red">Not allowed to see Oral Endocrine therapy data because of your location. Please contact Administrator if you really want to see this patient.</font> </td></tr>
+                                </c:if>
+                            </tbody>
+                        </table>
+</div>
+
+<div id="formEntryDialog">
+	<table cellspacing="0" cellpadding="2" class="pathologyPatientEncountersTable" width="100%" border="1" style="border-collapse: collapse; border-color: 42978f;">
+
+    	<!-- <center><u><spring:message code="htmlformentry.patientDashboard.enterForm"/></u></center> -->
+    	<thead bgcolor="#009d8e">
+                <tr>
+                    <th  style="color:white;"> Enter Form </th>
+                </tr>
+        </thead>
+        <tbody>
+        	<c:forEach var="hf" items="${ model.oethtmlForms }">
+        	<tr valign="top">
+    		<td>
+                <a href="${ pageContext.request.contextPath }/module/htmlformentry/htmlFormEntry.form?personId=${ model.personId }&patientId=${ model.personId }&returnUrl=&formId=${hf.form.formId}">
+                    ${ hf.name }
+                </a>
+    		</td>
+    		</tr>
+    		</c:forEach>
+    	</tbody>
+    </tr>
+    </table>
+</div>
+
+	</openmrs:hasPrivilege>
+
+	<%--  End Oral Endocrine Therapy --%>
+
+
+
 	<openmrs:htmlInclude file="/dwr/interface/DWRObsService.js" />
 	<openmrs:htmlInclude file="/dwr/interface/DWRPatientService.js" />
 	<openmrs:htmlInclude file="/dwr/engine.js" />
