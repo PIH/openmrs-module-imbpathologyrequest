@@ -3,18 +3,18 @@
 <module configVersion="1.2">
 	
 	<!-- Base Module Properties -->
-	<id>${project.parent.artifactId}</id>
-	<name>${project.parent.name}</name>
-	<version>${project.parent.version}</version>
+	<id>imbpathologyrequest</id>
+	<name>Imbpathologyrequest</name>
+	<version>1.0.0-SNAPSHOT</version>
 	<package>org.openmrs.module.imbpathologyrequest</package>
 	<author>jberchmas</author>
 	<description>
-			${project.parent.description}
+			IMB pathology requests module
 	</description>
 
 	<activator>org.openmrs.module.imbpathologyrequest.ImbpathologyrequestActivator</activator>
 	
-	<!-- <updateURL>https://modules.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL> -->
+	<!-- <updateURL>https://modules.openmrs.org/modules/download/imbpathologyrequest/update.rdf</updateURL> -->
 	<!-- /Base Module Properties -->
 	
 	<require_version>2.3.0</require_version>
@@ -41,14 +41,29 @@
 	</aware_of_modules>
 
 	<privilege>
+		<name>View Encounters Remotely</name>
+		<description>Privilege to View Pathology Encounters Section on Patient Dashboard</description>
+	</privilege>
+	<privilege>
 		<name>View Pathology Encounters</name>
 		<description>Privilege to View Pathology Encounters Section on Patient Dashboard</description>
+	</privilege>
+	<privilege>
+		<name>View OERT Encounters</name>
+		<description>Privilege to View OERT Encounters Section on Patient Dashboard</description>
 	</privilege>
 	<globalProperty>
 		<property>imbpathologyrequest.pathologyEncounterType</property>
 		<defaultValue>38</defaultValue>
 		<description>
 			Pathology Encounter Type ID.
+		</description>
+	</globalProperty>
+	<globalProperty>
+		<property>imbpathologyrequest.oertEncounterType</property>
+		<defaultValue>69</defaultValue>
+		<description>
+			OERT Encounter Type ID.
 		</description>
 	</globalProperty>
 	<globalProperty>
@@ -84,7 +99,7 @@
 	<!-- AOP
 	<advice>
 		<point>org.openmrs.api.FormService</point>
-		<class>@MODULE_PACKAGE@.advice.DuplicateFormAdvisor</class>
+		<class>org.openmrs.module.imbpathologyrequest.advice.DuplicateFormAdvisor</class>
 	</advice>
 	 /AOP -->
 	
@@ -99,7 +114,7 @@
 
 	<!-- Required Global Properties 
 	<globalProperty>
-		<property>@MODULE_ID@.someProperty</property>
+		<property>imbpathologyrequest.someProperty</property>
 		<defaultValue></defaultValue>
 		<description>
 			A description of the global property goes here.  The description
@@ -113,14 +128,14 @@
 	<dwr>
 		<allow>
 			<create creator="new" javascript="DWRFormEntryService">
-				<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/>
+				<param name="class" value="org.openmrs.module.imbpathologyrequest.web.DWRFormEntryService"/>
 				<include method="enterForm"/>
 			</create>
 		</allow>
 
 		<signatures>
 			<![CDATA[
-			import @MODULE_PACKAGE@.web.DWRFormEntryService;
+			import org.openmrs.module.imbpathologyrequest.web.DWRFormEntryService;
 			DWRFormEntryService.enterForm(Integer patientId, Integer formId, boolean useEncounter, List<String> fields);
 			]]>
 		</signatures>	
@@ -131,14 +146,14 @@
 	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> 
 	<servlet>
 		<servlet-name>formDownload</servlet-name>
-		<servlet-class>@MODULE_PACKAGE@.web.FormDownloadServlet</servlet-class>
+		<servlet-class>org.openmrs.module.imbpathologyrequest.web.FormDownloadServlet</servlet-class>
 	</servlet>
 	-->
 	<!-- /Servlets -->
 	
 	
 	<!-- Internationalization -->
-	<!-- All message codes should start with @MODULE_ID@.* -->
+	<!-- All message codes should start with imbpathologyrequest.* -->
 	<messages>
 		<lang>en</lang>
 		<file>messages.properties</file>

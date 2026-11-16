@@ -13,14 +13,10 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.web.extension.FormEntryHandler;
 import org.openmrs.web.controller.PortletController;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-@Controller
-@RequestMapping("**/imbPathologyRequestPatientEncounters.portlet")
 public class IMBPathologyRequestPortletController extends PortletController {
 	
 	private static final Log log = LogFactory.getLog(IMBPathologyRequestPortletController.class);
@@ -54,25 +50,35 @@ public class IMBPathologyRequestPortletController extends PortletController {
 		HtmlFormEntryService service = HtmlFormEntryUtil.getService();
 		List<HtmlForm> allHtmlforms=service.getAllHtmlForms();
 		List<HtmlForm> pathologyHtmlforms=new ArrayList<HtmlForm>();
+		List<HtmlForm> oethtmlForms=new ArrayList<HtmlForm>();
 		int pathologyEncounterType=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("imbpathologyrequest.pathologyEncounterType"));
+		int oetEncounterType=Integer.parseInt(Context.getAdministrationService().getGlobalProperty("imbpathologyrequest.oertEncounterType"));
 		for (HtmlForm htmlForm:allHtmlforms) {
 			if (htmlForm.getForm().getEncounterType() != null) {
 				if (htmlForm.getForm().getEncounterType().getEncounterTypeId() == pathologyEncounterType) {
 					pathologyHtmlforms.add(htmlForm);
 				}
+				if (htmlForm.getForm().getEncounterType().getEncounterTypeId() == oetEncounterType) {
+					oethtmlForms.add(htmlForm);
+				}
 			}
 		}
-model.put("pathologyhtmlForms",pathologyHtmlforms);
+		model.put("pathologyhtmlForms",pathologyHtmlforms);
+		model.put("oethtmlForms",oethtmlForms);
 
 		List<Encounter> encounters=Context.getEncounterService().getEncountersByPatientId(patientId);
 		List<Encounter> pathologyEncounters=new ArrayList<Encounter>();
+		List<Encounter> oetEncounters=new ArrayList<Encounter>();
 		for (Encounter enc:encounters) {
 			if (enc.getEncounterType().getEncounterTypeId() == pathologyEncounterType){
 				pathologyEncounters.add(enc);
 			}
-
+			if (enc.getEncounterType().getEncounterTypeId() == oetEncounterType){
+				oetEncounters.add(enc);
+			}
 		}
 		model.put("pathologyEncounters",pathologyEncounters);
+		model.put("oetEncounters",oetEncounters);
 
 		if (log.isDebugEnabled())
 			log.debug("In PortletControllerUtil....");
